@@ -14,12 +14,16 @@ import {
   KeyboardAvoidingView
 } from 'react-native';
 
+import RN_Storage from './storage';
+
 import md5 from "react-native-md5";
 import t from "tcomb-form-native";
 
 import Toast from 'react-native-simple-toast';
 
 import PushController from "./PushController";
+
+import styles from "./LoginPageStyle";
 
 import DeviceInfo from 'react-native-device-info';
 var LoginForm = t.form.Form;
@@ -38,9 +42,42 @@ export default class LoginPage extends Component {
       refreshing: false,
       token: '',
     };
+    this.FormValue = {
+    };
   };
 
   componentDidMount() {
+    // auto login if previous login which stored storage
+    RN_Storage.load({
+      key: 'loginState',
+
+      // autoSync(default true) means if data not found or expired,
+      // then invoke the corresponding sync method
+      // autoSync: true,
+
+      // syncInBackground(default true) means if data expired,
+      // return the outdated data first while invoke the sync method.
+      // It can be set to false to always return data provided by sync method when expired.(Of course it's slower)
+      // syncInBackground: true
+    }).then(ret => {
+      // found data go to then()
+      Toast.show(JSON.stringify([ret.host, ret.username, ret.password]));
+    }).catch(err => {
+      // any exception including data not found 
+      // goes to catch()
+      console.warn(err.message);
+      switch (err.name){
+        case 'NotFoundError':
+          // TODO;
+          break;
+        case 'ExpiredError':
+          // TODO
+          break;
+      }
+    });
+  }
+
+  componentWillmount() {
   }
 
   componentWillUnmount() {
@@ -54,31 +91,19 @@ export default class LoginPage extends Component {
     }
   };
 
-  _CheckLogin = () => {
-    this.setState({refreshing: true});
-    this._Login();
-    this.setState({refreshing: false});
+  _ChangeForm = (value) => {
+    this.FormValue = value;
   };
 
-  _updateText = (text, value) => {
-    this.setState((state) => {
-      newState = state;
-      if(text == 'token'){ newState.login.token = value }
-      if(text == 'host'){ newState.login.host = value }
-      if(text == 'username'){ newState.login.username = value }
-      if(text == 'password'){ newState.login.password = md5.hex_md5(value) }
-      return newState;
-    });
+  _CheckLogin = () => {
+    Toast.show('Awaiting Login');
+    this._Login();
   };
 
   _LoginValue = () => {
     // init value for preset value for development
     if(!__DEV__) return {};
-    return {
-      host: '',
-      username: '',
-      password: '',
-    }
+    return FormValue;
   }
 
   _LoginOption = () => {
@@ -89,14 +114,24 @@ export default class LoginPage extends Component {
           label: 'System URL',
           placeholder: '',
           returnKeyType: 'next',
+          blurOnSubmit: false,
+          keyboardType: 'url',
           onSubmitEditing: () => {this.refs.form.getComponent('username').refs.input.focus()},
+//          onEndEditing: () => {this.refs.form.getComponent('username').refs.input.focus()},
         },
         username: {
           returnKeyType: 'next',
+          blurOnSubmit: false,
           onSubmitEditing: () => {this.refs.form.getComponent('password').refs.input.focus()},
+//          onEndEditing: () => {this.refs.form.getComponent('password').refs.input.focus()},
         },
         password: {
+          returnKeyType: 'send',
+          blurOnSubmit: false,
           secureTextEntry: true,
+          onSubmitEditing: () => {this._CheckLogin()},
+          //onEndEditing: () => {this.refs.form.getComponent('password').refs.input.blur()},
+//          onEndEditing: () => {alert(123)},
         },
       }
     };
@@ -106,7 +141,8 @@ export default class LoginPage extends Component {
   _Login = () => {
     var navigator = this.props.navigator;
     // Toast.show('DONE');
-    var value = this.refs.form.getValue();
+    //var value = this.refs.form.getValue();
+    var value = this.FormValue || {};
     if(value.host == '' || value.login == '' || value.password == '') return;
     let host = value.host;
     let ssl = false; // default http://
@@ -160,12 +196,28 @@ export default class LoginPage extends Component {
 
           if(data.message) Toast.show(data.message);
 
+          let loginState = {
+            host: host,
+            username: value.username,
+            password: md5.hex_md5(value.password)
+          };
+
+          //alert(JSON.stringify(Object.getOwnPropertyNames(RN_Storage)));
+          //alert(JSON.stringify(RN_Storage.save));
+
+          RN_Storage.save({
+            key: 'loginState',  // Note: Do not use underscore("_") in key!
+//            id: '1001',   // Note: Do not use underscore("_") in id!    
+            rawData: loginState,
+            expires: null
+          });
+
           setTimeout(() => {
             navigator.push({
               id: 'MainPage',
               name: 'Main'
             });
-          }, __DEV__ ? 0 : 1000);
+          }, 0);
 
         }else{
           if(data.error) Toast.show(data.error);
@@ -181,75 +233,39 @@ export default class LoginPage extends Component {
     var width = Dimensions.get('window').width;
     var height = Dimensions.get('window').height;
     return (
-        <View style={{flex: 1}}>
-        <ScrollView>
-          <View style={{flex: 1, height: height*0.33}}>
-            <View style={{flex: 1, backgroundColor: 'blue', alignItems: 'center', justifyContent: 'center'}}>
+        <ScrollView style={{backgroundColor: 'lightblue'}} keyboardShouldPersistTaps='handled'>
+          <View style={{backgroundColor: 'blue', alignItems: 'center', justifyContent: 'center'}}>
 
-              <Text style={{color: 'lightblue' }}>BANNER</Text>
-              <PushController
-                onChangeToken={token => this.setState({token: token || ""})}
-              />
-              <Text style={styles.instructions}>Token: {this.state.token}</Text>
-
-            </View>
+            <Text style={{color: 'lightblue', padding: 60 }}>BANNER</Text>
+            <PushController
+              onChangeToken={token => this.setState({token: token || ""})}
+            />
 
           </View>
           <View style={{flex: 2, backgroundColor: 'lightblue', alignItems: 'center', height: height*0.67}}>
             <View style={{flex:1, width:width*0.8}}>
 
               <Text style={{color: 'black'}}> </Text>
+          <View style={{paddingLeft: 40, paddingRight: 40}}>
 
+            <View>
               <LoginForm
                 ref="form"
                 type={LoginInfo}
                 options={this._LoginOption}
-                value={this._LoginValue()}
+                value={this.FormValue}
+                onChange={this._ChangeForm}
               />
+            </View>
 
+            <View>
               <TouchableHighlight style={styles.button} onPress={this._CheckLogin} underlayColor='#99d9f4'>
                 <Text style={styles.buttonText}>Login</Text>
               </TouchableHighlight>
-
             </View>
+
           </View>
         </ScrollView>
-        </View>
       );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: 'white',
-    marginBottom: 5,
-  },
-  button: {
-    backgroundColor: "teal",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    marginVertical: 15,
-    borderRadius: 10,
-    alignItems: 'center'
-  },
-  buttonText: {
-    color: "white",
-    backgroundColor: "transparent",
-  },
-  textInput: {
-    height: 50,
-    flex: 1,
-  }
-});
