@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "277074168783",
+    "firebase_url": "https://garmentpro-e67e5.firebaseio.com",
+    "project_id": "garmentpro-e67e5",
+    "storage_bucket": "garmentpro-e67e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:277074168783:android:36f7e9efa8547231",
+        "android_client_info": {
+          "package_name": "com.garmentpro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "277074168783-c0utus4qk8nbcevg0k9co4op5kh56hdl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS6dhOik-fwtbZN-1zrdmwWr3CLGLWC-Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "277074168783-c0utus4qk8nbcevg0k9co4op5kh56hdl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

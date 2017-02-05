@@ -16,7 +16,7 @@ import {
 
 import SplashPage from './SplashPage';
 import LoginPage from './LoginPage';
-//import MainPage from './MainPage';
+import MainPage from './MainPage';
 //import SettingPage from './SettingPage';
 
 export default class App extends Component {
