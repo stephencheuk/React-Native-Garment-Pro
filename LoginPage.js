@@ -43,6 +43,9 @@ export default class LoginPage extends Component {
       token: '',
     };
     this.FormValue = {
+      host: '',
+      username: '',
+      password: '',
     };
   };
 
@@ -242,10 +245,11 @@ export default class LoginPage extends Component {
             />
 
           </View>
-          <View style={{flex: 2, backgroundColor: 'lightblue', alignItems: 'center', height: height*0.67}}>
-            <View style={{flex:1, width:width*0.8}}>
 
-              <Text style={{color: 'black'}}> </Text>
+          <View>
+            <Text style={{color: 'black', padding: 10 }}></Text>
+          </View>
+
           <View style={{paddingLeft: 40, paddingRight: 40}}>
 
             <View>
