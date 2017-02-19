@@ -23,7 +23,7 @@ export default class PushController extends Component {
     });
 
     this.notificationListner = FCM.on(FCMEvent.Notification, notif => {
-      console.log("Notification", notif);
+      //console.log("Notification", notif);
       if(notif.local_notification){
         return;
       }

@@ -47,37 +47,16 @@ export default class LoginPage extends Component {
       username: '',
       password: '',
     };
+    RN_Storage.getAllDataForKey('loginState').then(users => {
+      if(users.length > 0){
+        this.FormValue.host = users[0].host;
+        this.FormValue.username = users[0].username;
+        //this.FormValue.password = users[0].password;
+      }
+    });
   };
 
   componentDidMount() {
-    // auto login if previous login which stored storage
-    RN_Storage.load({
-      key: 'loginState',
-
-      // autoSync(default true) means if data not found or expired,
-      // then invoke the corresponding sync method
-      // autoSync: true,
-
-      // syncInBackground(default true) means if data expired,
-      // return the outdated data first while invoke the sync method.
-      // It can be set to false to always return data provided by sync method when expired.(Of course it's slower)
-      // syncInBackground: true
-    }).then(ret => {
-      // found data go to then()
-      Toast.show(JSON.stringify([ret.host, ret.username, ret.password]));
-    }).catch(err => {
-      // any exception including data not found 
-      // goes to catch()
-      console.warn(err.message);
-      switch (err.name){
-        case 'NotFoundError':
-          // TODO;
-          break;
-        case 'ExpiredError':
-          // TODO
-          break;
-      }
-    });
   }
 
   componentWillmount() {
@@ -161,11 +140,13 @@ export default class LoginPage extends Component {
     if(e != -1){
       host = host.substring(0, e);
     }
+    let ClientID = DeviceInfo.getModel() + '/' + DeviceInfo.getUniqueID();
+    let token = this.state.token;
     let postVal = {
       command: 'quickRegister',
       device: DeviceInfo.getSystemName(), // Android
-      clientId: DeviceInfo.getModel() + '/' + DeviceInfo.getUniqueID(), // g3/357513060923035
-      regId: this.state.token,
+      clientId: ClientID, // g3/357513060923035
+      regId: token,
       email: value.username,
       password: md5.hex_md5(value.password),
       notify: 1,
@@ -202,7 +183,9 @@ export default class LoginPage extends Component {
           let loginState = {
             host: host,
             username: value.username,
-            password: md5.hex_md5(value.password)
+            password: md5.hex_md5(value.password),
+            clientid: ClientID,
+            regid: token
           };
 
           //alert(JSON.stringify(Object.getOwnPropertyNames(RN_Storage)));
@@ -210,9 +193,13 @@ export default class LoginPage extends Component {
 
           RN_Storage.save({
             key: 'loginState',  // Note: Do not use underscore("_") in key!
-//            id: '1001',   // Note: Do not use underscore("_") in id!    
+            id: '1001',   // Note: Do not use underscore("_") in id!    
             rawData: loginState,
             expires: null
+          });
+
+          RN_Storage.getAllDataForKey('loginState').then(users => {
+              console.log('getAllDataForKey then => ', users);
           });
 
           setTimeout(() => {
@@ -235,6 +222,9 @@ export default class LoginPage extends Component {
   render(){
     var width = Dimensions.get('window').width;
     var height = Dimensions.get('window').height;
+
+    console.log(this.FormValue);
+
     return (
         <ScrollView style={{backgroundColor: 'lightblue'}} keyboardShouldPersistTaps='handled'>
           <View style={{backgroundColor: 'blue', alignItems: 'center', justifyContent: 'center'}}>

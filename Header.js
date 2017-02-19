@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
-                                                                                                                                                                                                    
+
 const Header = () => (
   <View style={styles.top}>
     <Text style={styles.logo}>Todo</Text>
@@ -42,5 +42,7 @@ const styles = StyleSheet.create({
   },
   icons: {
     flexDirection: 'row',
+    height: 0,
+    opacity: 0,
   },
 });
