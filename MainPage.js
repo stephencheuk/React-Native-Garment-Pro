@@ -47,15 +47,6 @@ export default class MainPage extends Component {
           this.setState({refreshing: false});
         }
     });
-//    Alert.alert(
-//      'Alert Title',
-//      DeviceInfo.getUniqueID(),
-//      [
-//        //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-//        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-//        {text: 'OK', onPress: () => console.log('OK Pressed')},
-//      ]
-//    )
   }
 
   constructor(props){
@@ -78,23 +69,11 @@ export default class MainPage extends Component {
     this.setState({refreshing: false});
   }
 
-  _navigateToSettings () {
-    this.props.navigator.push({
-      id: 'SettingPage',
-      name: 'Setting',
-      SceneConfigs: Navigator.SceneConfigs.FloatFromRight
-    });
-  }
-
   _onActionSelected () {
     this._navigateToSettings()
   }
 
   render() {
-
-//    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-//    var dataSource = ds.cloneWithRows(['row 1', 'row 2','row 3','row 4','row 5','row 6','row 7','row 8','row 8','row 8','row 8','row 8']);
-//    var dataSource = this.state.dataSource.cloneWithRows(this.state.ds);
 
     return (
       <View style={styles.top}>
@@ -222,7 +201,6 @@ var styles = StyleSheet.create({
   TodoDate: {
     fontSize: 8,
     color: 'gray',
-    //textAlign: 'right',
     position: 'absolute',
     right: 10,
     top: 3,

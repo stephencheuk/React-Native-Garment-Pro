@@ -8,7 +8,6 @@ import {
 var DeviceInfo = require('react-native-device-info');
 import RN_Storage from './storage';
 import Auth from './Auth';
-//import Auth from './FirebaseClient';
 import Toast from 'react-native-simple-toast';
 
 export default class SplashPage extends Component {
@@ -63,7 +62,8 @@ export default class SplashPage extends Component {
   render() {
     return (
       <View style={{flex: 1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={{color: 'black', fontSize: 32,}}>Loading ... / ICON HERE</Text>
+        <Text style={{color: 'black', fontSize: 32,}}>Garment-Pro</Text>
+        <Text style={{color: 'black', fontSize: 32,}}>Order-Pro</Text>
       </View>
     );
   }

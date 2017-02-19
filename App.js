@@ -1,8 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
-
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -17,7 +12,6 @@ import {
 import SplashPage from './SplashPage';
 import LoginPage from './LoginPage';
 import MainPage from './MainPage';
-//import SettingPage from './SettingPage';
 
 export default class App extends Component {
   render() {
@@ -54,31 +48,11 @@ export default class App extends Component {
             navigator={navigator} />
       );
     }
-//    if (routeId === 'SettingPage') {
-//      return (
-//        <SettingPage
-//            navigator={navigator} />
-//      );
-//    }
-//    if (routeId === 'PersonPage') {
-//      return (
-//        <PersonPage
-//          navigator={navigator} />
-//      );
-//    }
     return this.noRoute(navigator);
 
   }
   noRoute(navigator) {
-    return (
-      <View style={{flex: 1, alignItems: 'stretch', justifyContent: 'center'}}>
-        <TouchableOpacity style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
-            onPress={() => navigator.pop()}>
-          <Text style={{color: 'red', fontWeight: 'bold'}}>Page NOT FIND</Text>
-          <Text style={{color: 'red', fontWeight: 'bold'}}>No Route</Text>
-        </TouchableOpacity>
-      </View>
-    );
+    navigator.pop();
   }
 }
 

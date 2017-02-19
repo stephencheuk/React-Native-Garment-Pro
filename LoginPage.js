@@ -51,7 +51,6 @@ export default class LoginPage extends Component {
       if(users.length > 0){
         this.FormValue.host = users[0].host;
         this.FormValue.username = users[0].username;
-        //this.FormValue.password = users[0].password;
       }
     });
   };
@@ -65,14 +64,6 @@ export default class LoginPage extends Component {
   componentWillUnmount() {
   }
 
-  onPress = () => {
-    // call getValue() to get the values of the form
-    var value = this.refs.form.getValue();
-    if (value) { // if validation fails, value will be null
-      console.log(value); // value here is an instance of LoginInfo
-    }
-  };
-
   _ChangeForm = (value) => {
     this.FormValue = value;
   };
@@ -81,12 +72,6 @@ export default class LoginPage extends Component {
     Toast.show('Awaiting Login');
     this._Login();
   };
-
-  _LoginValue = () => {
-    // init value for preset value for development
-    if(!__DEV__) return {};
-    return FormValue;
-  }
 
   _LoginOption = () => {
     return {
@@ -99,21 +84,17 @@ export default class LoginPage extends Component {
           blurOnSubmit: false,
           keyboardType: 'url',
           onSubmitEditing: () => {this.refs.form.getComponent('username').refs.input.focus()},
-//          onEndEditing: () => {this.refs.form.getComponent('username').refs.input.focus()},
         },
         username: {
           returnKeyType: 'next',
           blurOnSubmit: false,
           onSubmitEditing: () => {this.refs.form.getComponent('password').refs.input.focus()},
-//          onEndEditing: () => {this.refs.form.getComponent('password').refs.input.focus()},
         },
         password: {
           returnKeyType: 'send',
           blurOnSubmit: false,
           secureTextEntry: true,
           onSubmitEditing: () => {this._CheckLogin()},
-          //onEndEditing: () => {this.refs.form.getComponent('password').refs.input.blur()},
-//          onEndEditing: () => {alert(123)},
         },
       }
     };
@@ -122,8 +103,6 @@ export default class LoginPage extends Component {
 
   _Login = () => {
     var navigator = this.props.navigator;
-    // Toast.show('DONE');
-    //var value = this.refs.form.getValue();
     var value = this.FormValue || {};
     if(value.host == '' || value.login == '' || value.password == '') return;
     let host = value.host;
@@ -144,8 +123,8 @@ export default class LoginPage extends Component {
     let token = this.state.token;
     let postVal = {
       command: 'quickRegister',
-      device: DeviceInfo.getSystemName(), // Android
-      clientId: ClientID, // g3/357513060923035
+      device: DeviceInfo.getSystemName(),
+      clientId: ClientID,
       regId: token,
       email: value.username,
       password: md5.hex_md5(value.password),
@@ -154,7 +133,6 @@ export default class LoginPage extends Component {
       ret: 'json',
       servertype: 'fcm',
     };
-    //Toast.show(JSON.stringify(postVal), Toast.LONG);
     let url = 'http' + (ssl ? 's':'') + '://'+ host + '/cgi-bin/index.cgi?Action=Mobile_API.run';
     console.log(url);
     console.log(postVal);
@@ -166,8 +144,6 @@ export default class LoginPage extends Component {
       },
       body: Object.keys(postVal).map((t)=>t+"="+postVal[t]).join('&')
     }).then((res) => {
-//      console.log('post result');
-//      console.log(res.text());
       if(res.status === 200 || res.status === 0){
         return Promise.resolve(res)
       }else{
@@ -188,12 +164,9 @@ export default class LoginPage extends Component {
             regid: token
           };
 
-          //alert(JSON.stringify(Object.getOwnPropertyNames(RN_Storage)));
-          //alert(JSON.stringify(RN_Storage.save));
-
           RN_Storage.save({
-            key: 'loginState',  // Note: Do not use underscore("_") in key!
-            id: '1001',   // Note: Do not use underscore("_") in id!    
+            key: 'loginState',
+            id: '1001',
             rawData: loginState,
             expires: null
           });
@@ -222,8 +195,6 @@ export default class LoginPage extends Component {
   render(){
     var width = Dimensions.get('window').width;
     var height = Dimensions.get('window').height;
-
-    console.log(this.FormValue);
 
     return (
         <ScrollView style={{backgroundColor: 'lightblue'}} keyboardShouldPersistTaps='handled'>

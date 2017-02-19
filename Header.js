@@ -6,19 +6,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-//import Icon from 'react-native-vector-icons/MaterialIcons';
-import Icon from 'react-native-vector-icons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Entypo from 'react-native-vector-icons/Entypo';
-
 const Header = () => (
   <View style={styles.top}>
     <Text style={styles.logo}>Todo</Text>
-    <View style={styles.icons}>
-      <FontAwesome name='filter' size={30} color="white" style={{paddingRight: 15, paddingLeft: 15}}/>
-      <FontAwesome name='gear' size={30} color="white" style={{paddingRight: 15, paddingLeft: 15}}/>
-    </View>
   </View>
   );
 
@@ -39,10 +29,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     margin: 10,
     fontWeight: '500',
-  },
-  icons: {
-    flexDirection: 'row',
-    height: 0,
-    opacity: 0,
   },
 });
