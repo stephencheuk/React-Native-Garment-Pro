@@ -12,11 +12,11 @@ import {
   Image,
   StatusBar,
   RefreshControl,
-  Alert
+  Alert,
+  Dimensions
 } from 'react-native';
 
 import Header from './Header';
-import Footer from './Footer';
 
 var DeviceInfo = require('react-native-device-info');
 import RN_Storage from './storage';
@@ -32,7 +32,6 @@ export default class MainPage extends Component {
         if(users.length > 0){
           todoMessage.get(users[0]).then(res => {
             res.json().then((jsdata) => {
-              console.log(jsdata)
               if(jsdata.result){
                 this.setState({
                   ds: jsdata.data,
@@ -76,11 +75,13 @@ export default class MainPage extends Component {
 
   render() {
 
+   var height = Dimensions.get('window').height;
+
     return (
       <View style={styles.top}>
         <Header/>
         <ListView
-          style={styles.TodoContainer}
+          style={styles.TodoContainer, {'height': height - 95}}
           dataSource={this.state.dataSource}
           renderRow={(rowData) => createTodoListRow(rowData)}
           renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.TodoSeparator} /> }
@@ -91,7 +92,6 @@ export default class MainPage extends Component {
             />
           }
         />
-        <Footer/>
       </View>
     )
 
