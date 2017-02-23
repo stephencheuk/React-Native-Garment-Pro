@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 
 import Header from './Header';
+import Footer from './Footer';
 
 var DeviceInfo = require('react-native-device-info');
 import RN_Storage from './storage';
@@ -90,6 +91,7 @@ export default class MainPage extends Component {
             />
           }
         />
+        <Footer/>
       </View>
     )
 
