@@ -1,0 +1,35 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'GarmentPro' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  pod 'Firebase/Messaging' 
+
+  # Pods for GarmentPro
+
+#  target 'GarmentPro-tvOSTests' do
+#    inherit! :search_paths
+#    # Pods for testing
+#  end
+
+  target 'GarmentProTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
+
+target 'GarmentPro-tvOS' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for GarmentPro-tvOS
+
+  target 'GarmentPro-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
