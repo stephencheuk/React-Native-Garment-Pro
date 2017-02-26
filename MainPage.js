@@ -132,14 +132,6 @@ var createTodoListRow = (data) => {
     );
 }
 
-var toolbarActions = [
-  {
-    title: 'Settings',
-    icon: require('./images/settings.png'),
-    show: 'always'
-  },
-];
-
 var styles = StyleSheet.create({
   toolbar: {
     height: 56,
