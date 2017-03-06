@@ -21,6 +21,9 @@ import Header from './Header';
 var DeviceInfo = require('react-native-device-info');
 import RN_Storage from './storage';
 import todoMessage from './TodoMessage';
+import Toast from 'react-native-simple-toast';
+import PushController from "./PushController";
+import Auth from './Auth';
 
 export default class MainPage extends Component {
 
@@ -73,12 +76,56 @@ export default class MainPage extends Component {
     this._navigateToSettings()
   }
 
+  _onTokenChange = (param) => {
+    RN_Storage.getAllDataForKey('loginState').then(users => {
+        if(users.length == 0){
+          setTimeout(() => {
+            navigator.push({
+              id: 'LoginPage',
+              name: 'Login'
+            });
+          }, 0);
+        }else{
+
+          users[0].regid = param.token;
+
+          RN_Storage.save({
+            key: 'loginState',
+            id: '1001',
+            rawData: users[0],
+            expires: null
+          });
+
+          Auth.login(users[0]).then(
+            (res) => {
+              res.json().then(function(data) {
+                if(data.result){
+                  if(data.message) Toast.show(data.message);
+                }else{
+                  if(data.error) Toast.show(data.error);
+                  setTimeout(() => {
+                    navigator.push({
+                      id: 'LoginPage',
+                      name: 'Login'
+                    });
+                  }, 0);
+                }
+              });
+            }
+          ).catch((e) => {
+            alert(e.message);
+          });
+        }
+    });
+  }
+
   render() {
 
    var height = Dimensions.get('window').height;
 
     return (
       <View style={styles.top}>
+        <PushController onChangeToken={token => this._onTokenChange(token)}/>
         <Header/>
         <ListView
           style={styles.TodoContainer, {'height': height - 95}}
