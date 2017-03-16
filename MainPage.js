@@ -77,6 +77,8 @@ export default class MainPage extends Component {
   }
 
   _onTokenChange = (param) => {
+    console.log('_onTokenChange => ' + param.token);
+    this.setState({token: param.token || ""});
     RN_Storage.getAllDataForKey('loginState').then(users => {
         if(users.length == 0){
           setTimeout(() => {
@@ -87,7 +89,7 @@ export default class MainPage extends Component {
           }, 0);
         }else{
 
-          users[0].regid = param.token;
+          users[0].regid = this.state.token;
 
           RN_Storage.save({
             key: 'loginState',
@@ -125,7 +127,7 @@ export default class MainPage extends Component {
 
     return (
       <View style={styles.top}>
-        <PushController onChangeToken={token => this._onTokenChange(token)}/>
+        <PushController onChangeToken={token => this._onTokenChange({token:token||""})}/>
         <Header/>
         <ListView
           style={styles.TodoContainer, {'height': height - 95}}
